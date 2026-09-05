@@ -56,13 +56,11 @@ html_code = """
         ctx.shadowColor = color;
 
         // 1. Left Peak par PRABHAT (Exact math placement)
-        // Dil ke parametric formula ke hisaab se left peak approx angle 2.2 par hota h
         let xLeft = 16 * Math.pow(Math.sin(2.2), 3) * 12.5;
         let yLeft = (13 * Math.cos(2.2) - 5 * Math.cos(4.4) - 2 * Math.cos(6.6) - Math.cos(8.8)) * 12.5;
         ctx.fillText("PRABHAT", centerX + xLeft - 25, centerY - yLeft - 25);
 
         // 2. Right Peak par LAXMI (Exact math placement)
-        // Right peak approx angle 4.1 par hota h
         let xRight = 16 * Math.pow(Math.sin(4.1), 3) * 12.5;
         let yRight = (13 * Math.cos(4.1) - 5 * Math.cos(8.2) - 2 * Math.cos(12.3) - Math.cos(16.4)) * 12.5;
         ctx.fillText("LAXMI", centerX + xRight + 25, centerY - yRight - 25);
@@ -111,8 +109,8 @@ html_code = """
         drawFixedNames(randomColor);
 
         if (i <= totalSteps) {
-            i += 2; // Ultra Fast Speed
-            setTimeout(animate, 8); 
+            i += 1; // SPEED REDUCED: Ab ek baar mein 1 step hi badhega (pehle 2 badh raha tha)
+            setTimeout(animate, 25); // Thoda aur time gap diya smoother look ke liye
         } else {
             // Pura banne ke baad 2.5 second hold fir agla round loop
             setTimeout(() => {
