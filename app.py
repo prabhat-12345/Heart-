@@ -1,8 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Infinite Neon Name Heart", layout="centered")
-st.title("✨ Infinite Glowing Heart with Laxmi Name")
+st.set_page_config(page_title="Premium Name Heart", layout="centered")
+st.title("✨ Premium Neon Heart - Prabhat & Laxmi")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -19,13 +19,13 @@ html_code = """
     const centerY = canvas.height / 2;
     
     let i = 0;
-    const totalSteps = 240; // Ghana pattern
+    const totalSteps = 280; // Aur zyada ghani smooth lines ke liye steps badha diye
     
-    // Boundary par ghumne wala naam
-    const nameStr = "LAXMI";
-    let letterIndex = 0;
+    // Boundary par ghumne wala premium combination string
+    const textPattern = ["P","R","A","B","H","A","T","❤️","L","A","X","M","I","❤️"];
+    let patternIndex = 0;
     
-    // Pure, premium neon color palettes
+    // Premium bright neon palettes
     const colorPalettes = [
         ["#FF0055", "#00FFCC", "#99FF00", "#FFCC00", "#00CCFF", "#FF00FF"],
         ["#FF3366", "#FF6633", "#FFCC33", "#33FF66", "#3366FF", "#9933FF"],
@@ -33,19 +33,34 @@ html_code = """
     ];
     let currentPaletteIndex = 0;
 
-    // BOUNDARY PAR NEON ALPHABET DRAW KARNE WALA FUNCTION
-    function drawNeonLetter(x, y, letter, color) {
+    // Premium Premium Chhota Dil banane wala fix function
+    function drawSleekMiniHeart(x, y, size, color) {
         ctx.save();
         ctx.fillStyle = color;
-        ctx.font = "bold 16px Arial"; // Font size aur style set kiya
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = color;
+        
+        ctx.beginPath();
+        ctx.moveTo(x, y + size/3);
+        ctx.bezierCurveTo(x - size/2, y - size, x - size, y - size/3, x, y + size);
+        ctx.bezierCurveTo(x + size, y - size/3, x + size/2, y - size, x, y + size/3);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // Chhota aur sharp Alphabet draw karne wala function
+    function drawSleekLetter(x, y, letter, color) {
+        ctx.save();
+        ctx.fillStyle = color;
+        // Font size 16 se chhota karke 13px bold kar diya taaki standard premium lage
+        ctx.font = "bold 13px sans-serif"; 
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         
-        // Neon Glow effect letters par lagane ke liye
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 8;
         ctx.shadowColor = color;
         
-        // Letter ko position par draw karna
         ctx.fillText(letter, x, y);
         ctx.restore();
     }
@@ -54,7 +69,7 @@ html_code = """
         if (i <= totalSteps) {
             let angle = (i * (Math.PI * 2)) / totalSteps;
             
-            // Mathematics formula
+            // Heart mathematical formula
             let x = 16 * Math.pow(Math.sin(angle), 3);
             let y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
 
@@ -64,29 +79,35 @@ html_code = """
             let currentPalette = colorPalettes[currentPaletteIndex];
             let randomColor = currentPalette[Math.floor(Math.random() * currentPalette.length)];
 
-            // 1. Center se thick neon ray nikalna
+            // 1. Center se dense center-to-edge neon lines
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(drawX, drawY);
             ctx.strokeStyle = randomColor;
-            ctx.lineWidth = 1.2;
-            ctx.globalAlpha = 0.6;
+            ctx.lineWidth = 1.0; // Lines ko thoda aur sleek kiya premium look ke liye
+            ctx.globalAlpha = 0.5;
             ctx.stroke();
             ctx.restore();
 
-            // 2. Edge par Star/Dil ki jagah LAXMI naam ke alphabets lagana
-            // Har 6 steps ke baad ek naya letter banta jayega taaki letters clear dikhein
-            if (i % 6 === 0) {
-                let currentLetter = nameStr[letterIndex % nameStr.length];
-                drawNeonLetter(drawX, drawY, currentLetter, randomColor);
-                letterIndex++;
+            // 2. Alternate Pattern: Har 5 steps par ek element lagana
+            if (i % 5 === 0) {
+                let currentItem = textPattern[patternIndex % textPattern.length];
+                
+                if (currentItem === "❤️") {
+                    // Agar pattern me dil h toh sleek mini heart draw hoga (size 5)
+                    drawSleekMiniHeart(drawX, drawY - 2, 5, randomColor);
+                } else {
+                    // Agar alphabet h toh sharp alphabet draw hoga
+                    drawSleekLetter(drawX, drawY, currentItem, randomColor);
+                }
+                patternIndex++;
             }
 
             i++;
-            setTimeout(animate, 20); 
+            setTimeout(animate, 15); // Smooth premium rendering
         } else {
-            // Jab ek dil pura ban jaye, toh smoothly clear karke naya dil aur firse naam shuru karein
+            // Dil pura hone par 2 second ka pause, fir naya palette loop
             setTimeout(() => {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
                 let fadeCount = 0;
@@ -100,13 +121,13 @@ html_code = """
                         ctx.fillStyle = "black";
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         i = 0;
-                        letterIndex = 0; // Naam ko firse 'L' se shuru karne ke liye
+                        patternIndex = 0; // Har baar P se hi suru hoga loop
                         currentPaletteIndex = (currentPaletteIndex + 1) % colorPalettes.length;
                         animate();
                     }
                 }
                 fade();
-            }, 1800); // Dil banne ke baad thodi der ruka rahega
+            }, 2000);
         }
     }
     
