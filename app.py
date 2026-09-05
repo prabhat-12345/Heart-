@@ -29,23 +29,21 @@ html_code = """
     ];
     let currentPaletteIndex = 0;
 
-    // Premium Neon Star with Heavy Glow
-    function drawTurtleStar(x, y, color) {
+    // EKDOM SEEDHA CHHOTA DIL BANANE WALA FUNCTION (Star ki jagah boundary ke liye)
+    function drawMiniHeart(x, y, size, color) {
         ctx.save();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        
-        // Premium Shadow Blur for Real Neon Look
-        ctx.shadowBlur = 15;
+        ctx.fillStyle = color;
+        ctx.shadowBlur = 12;
         ctx.shadowColor = color;
         
-        for (let k = 0; k < 8; k++) {
-            let angle = k * (Math.PI / 4);
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x + Math.cos(angle) * 7, y + Math.sin(angle) * 7); 
-            ctx.stroke();
-        }
+        ctx.beginPath();
+        // Pointy tail perfectly neeche aayegi aur bumps upar rahenge
+        ctx.moveTo(x, y + size/3);
+        ctx.bezierCurveTo(x - size/2, y - size, x - size, y - size/3, x, y + size);
+        ctx.bezierCurveTo(x + size, y - size/3, x + size/2, y - size, x, y + size/3);
+        
+        ctx.closePath();
+        ctx.fill();
         ctx.restore();
     }
 
@@ -57,7 +55,7 @@ html_code = """
             let x = 16 * Math.pow(Math.sin(angle), 3);
             let y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
 
-            let drawX = centerX + (x * 12.5); // Slightly bigger size
+            let drawX = centerX + (x * 12.5); // Size match kiya
             let drawY = centerY - (y * 12.5);
 
             let currentPalette = colorPalettes[currentPaletteIndex];
@@ -70,19 +68,21 @@ html_code = """
             ctx.lineTo(drawX, drawY);
             ctx.strokeStyle = randomColor;
             ctx.lineWidth = 1.2;
-            ctx.globalAlpha = 0.7; // Standard smoothness ke liye
+            ctx.globalAlpha = 0.7; // Standard smoothness
             ctx.stroke();
             ctx.restore();
 
-            // 2. Edge par neon star banana
-            drawTurtleStar(drawX, drawY, randomColor);
+            // 2. Edge par purane Star ki jagah seedha chhota Dil banana
+            // i % 3 isliye taaki dil ek dusre ke upar chadh kar khichdi na banayein
+            if (i % 3 === 0) {
+                drawMiniHeart(drawX, drawY - 4, 7, randomColor);
+            }
 
             i++;
-            setTimeout(animate, 20); // Fast aur responsive rendering
+            setTimeout(animate, 20); // Smooth velocity rendering
         } else {
-            // Jab ek dil pura ban jaye, toh screen ko smoothly clear karke naya dil shuru karein
+            // Jab ek dil pura ban jaye, toh smoothly clear karke naya dil shuru karein
             setTimeout(() => {
-                // Fade out effect (Dhire se black color layer chadhana)
                 ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
                 let fadeCount = 0;
                 
@@ -92,21 +92,18 @@ html_code = """
                         fadeCount++;
                         requestAnimationFrame(fade);
                     } else {
-                        // Reset karke naya dil banana shuru karein
                         ctx.fillStyle = "black";
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         i = 0;
-                        // Agla neon color theme select karein
                         currentPaletteIndex = (currentPaletteIndex + 1) % colorPalettes.length;
                         animate();
                     }
                 }
                 fade();
-            }, 1500); // Dil banne ke baad 1.5 second tak screen par rukega phir naya banega
+            }, 1500); // 1.5 second tak screen par rukega
         }
     }
     
-    // Starting screen
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
