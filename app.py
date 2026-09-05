@@ -1,8 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Infinite Neon Heart", layout="centered")
-st.title("✨ Infinite Glowing Neon Heart")
+st.set_page_config(page_title="Infinite Neon Name Heart", layout="centered")
+st.title("✨ Infinite Glowing Heart with Laxmi Name")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -19,7 +19,11 @@ html_code = """
     const centerY = canvas.height / 2;
     
     let i = 0;
-    const totalSteps = 240; // Ghana (thick) banane ke liye high density steps
+    const totalSteps = 240; // Ghana pattern
+    
+    // Boundary par ghumne wala naam
+    const nameStr = "LAXMI";
+    let letterIndex = 0;
     
     // Pure, premium neon color palettes
     const colorPalettes = [
@@ -29,21 +33,20 @@ html_code = """
     ];
     let currentPaletteIndex = 0;
 
-    // EKDOM SEEDHA CHHOTA DIL BANANE WALA FUNCTION (Star ki jagah boundary ke liye)
-    function drawMiniHeart(x, y, size, color) {
+    // BOUNDARY PAR NEON ALPHABET DRAW KARNE WALA FUNCTION
+    function drawNeonLetter(x, y, letter, color) {
         ctx.save();
         ctx.fillStyle = color;
-        ctx.shadowBlur = 12;
+        ctx.font = "bold 16px Arial"; // Font size aur style set kiya
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        
+        // Neon Glow effect letters par lagane ke liye
+        ctx.shadowBlur = 10;
         ctx.shadowColor = color;
         
-        ctx.beginPath();
-        // Pointy tail perfectly neeche aayegi aur bumps upar rahenge
-        ctx.moveTo(x, y + size/3);
-        ctx.bezierCurveTo(x - size/2, y - size, x - size, y - size/3, x, y + size);
-        ctx.bezierCurveTo(x + size, y - size/3, x + size/2, y - size, x, y + size/3);
-        
-        ctx.closePath();
-        ctx.fill();
+        // Letter ko position par draw karna
+        ctx.fillText(letter, x, y);
         ctx.restore();
     }
 
@@ -55,7 +58,7 @@ html_code = """
             let x = 16 * Math.pow(Math.sin(angle), 3);
             let y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
 
-            let drawX = centerX + (x * 12.5); // Size match kiya
+            let drawX = centerX + (x * 12.5); 
             let drawY = centerY - (y * 12.5);
 
             let currentPalette = colorPalettes[currentPaletteIndex];
@@ -68,20 +71,22 @@ html_code = """
             ctx.lineTo(drawX, drawY);
             ctx.strokeStyle = randomColor;
             ctx.lineWidth = 1.2;
-            ctx.globalAlpha = 0.7; // Standard smoothness
+            ctx.globalAlpha = 0.6;
             ctx.stroke();
             ctx.restore();
 
-            // 2. Edge par purane Star ki jagah seedha chhota Dil banana
-            // i % 3 isliye taaki dil ek dusre ke upar chadh kar khichdi na banayein
-            if (i % 3 === 0) {
-                drawMiniHeart(drawX, drawY - 4, 7, randomColor);
+            // 2. Edge par Star/Dil ki jagah LAXMI naam ke alphabets lagana
+            // Har 6 steps ke baad ek naya letter banta jayega taaki letters clear dikhein
+            if (i % 6 === 0) {
+                let currentLetter = nameStr[letterIndex % nameStr.length];
+                drawNeonLetter(drawX, drawY, currentLetter, randomColor);
+                letterIndex++;
             }
 
             i++;
-            setTimeout(animate, 20); // Smooth velocity rendering
+            setTimeout(animate, 20); 
         } else {
-            // Jab ek dil pura ban jaye, toh smoothly clear karke naya dil shuru karein
+            // Jab ek dil pura ban jaye, toh smoothly clear karke naya dil aur firse naam shuru karein
             setTimeout(() => {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
                 let fadeCount = 0;
@@ -95,12 +100,13 @@ html_code = """
                         ctx.fillStyle = "black";
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         i = 0;
+                        letterIndex = 0; // Naam ko firse 'L' se shuru karne ke liye
                         currentPaletteIndex = (currentPaletteIndex + 1) % colorPalettes.length;
                         animate();
                     }
                 }
                 fade();
-            }, 1500); // 1.5 second tak screen par rukega
+            }, 1800); // Dil banne ke baad thodi der ruka rahega
         }
     }
     
