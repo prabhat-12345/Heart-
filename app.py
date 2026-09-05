@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Heart Curve Animation", layout="centered")
-st.title("💖 Python Heart Curve Exact Match")
+st.title("💖 True Python Heart Curve Replication")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -22,13 +22,13 @@ html_code = """
     const totalSteps = 120;
     const colors = ["red", "blue", "lime", "yellow", "cyan", "magenta", "orange", "pink"];
 
-    // Python ka star framework jo forward aur backward lines banata hai
-    function drawTurtleStar(x, y, color) {
+    // Python ka star jo forward(6), backward(6), right(45) karke 8 lines banata hai
+    def drawTurtleStar(x, y, color) {
         ctx.strokeStyle = color;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1;
         
         for (let k = 0; k < 8; k++) {
-            let angle = k * (Math.PI / 4); // 45 degrees match
+            let angle = k * (Math.PI / 4); // 45 degrees
             ctx.beginPath();
             ctx.moveTo(x, y);
             ctx.lineTo(x + Math.cos(angle) * 6, y + Math.sin(angle) * 6);
@@ -40,17 +40,17 @@ html_code = """
         if (i < totalSteps) {
             let angle = (i * (Math.PI * 2)) / 120;
             
-            // Exact formula python line 22-26 waala
+            // Formula exact line 22-26 waala
             let x = 16 * Math.pow(Math.sin(angle), 3);
             let y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
 
-            // Size set karne ke liye * 12
+            // Scaling match karne ke liye * 12 kiya hai
             let drawX = centerX + (x * 12);
             let drawY = centerY - (y * 12);
 
             let randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-            // 1. Center (0,0) se lekar edge tak line banana (t.goto(x, y))
+            // 1. Center se boundary tak line kheenchne ke liye (t.goto(x,y))
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(drawX, drawY);
@@ -58,15 +58,16 @@ html_code = """
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // 2. Boundary ke upar 8-line waala star banana
+            // 2. Boundary par star banane ke liye (for _ in range(8))
             drawTurtleStar(drawX, drawY, randomColor);
 
             i++;
+            // Is number ko badha kar slow ya kam karke fast kar sakte ho
             setTimeout(animate, 60); 
         }
     }
     
-    // Pure page ko black set karna suru mein
+    // Background black karne ke liye
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
