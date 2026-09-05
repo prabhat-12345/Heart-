@@ -1,8 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Premium Neon Heart with Photo", layout="centered")
-st.title("💖 Premium Neon Heart with Photo")
+st.set_page_config(page_title="Multi-Photo Neon Heart", layout="centered")
+st.title("✨ 4 Colors & 4 Photos Infinite Neon Heart")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -21,11 +21,19 @@ html_code = """
     let i = 0;
     const totalSteps = 240; 
     
-    const colors = ["#FF0055", "#00FFCC", "#99FF00", "#FFCC00", "#00CCFF", "#FF00FF"];
-
-    // Aapki upload ki hui photo ko automatically detect karne ke liye
-    const img = new Image();
-    img.src = "profile.jpg"; 
+    // 4 Alag-alag premium single-color palettes (Pink, Cyan, Lime/Green, Yellow)
+    const colorThemes = ["#FF0055", "#00CCFF", "#99FF00", "#FFCC00"];
+    
+    // 4 Photos ko load karna
+    const images = [];
+    const imageNames = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg"];
+    
+    for (let s = 0; s < 4; s++) {
+        images[s] = new Image();
+        images[s].src = imageNames[s];
+    }
+    
+    let currentThemeIndex = 0;
 
     function drawTurtleStar(x, y, color) {
         ctx.save();
@@ -43,11 +51,11 @@ html_code = """
         ctx.restore();
     }
 
-    // Photo ko dil ke shape mein kaat kar (clip) fit karne ke liye
-    function drawHeartPhoto(opacity) {
+    function drawHeartPhoto(opacity, imgObj) {
+        if (!imgObj || !imgObj.complete) return;
+        
         ctx.save();
         ctx.beginPath();
-        
         for (let t = 0; t <= totalSteps; t++) {
             let angle = (t * (Math.PI * 2)) / totalSteps;
             let x = 16 * Math.pow(Math.sin(angle), 3);
@@ -58,11 +66,11 @@ html_code = """
             else ctx.lineTo(drawX, drawY);
         }
         ctx.closePath();
-        ctx.clip(); // Image sirf dil ke andar dikhegi
+        ctx.clip(); 
 
         ctx.globalAlpha = opacity;
         let imgSize = 350; 
-        ctx.drawImage(img, centerX - imgSize/2, centerY - imgSize/2 - 20, imgSize, imgSize);
+        ctx.drawImage(imgObj, centerX - imgSize/2, centerY - imgSize/2 - 20, imgSize, imgSize);
         ctx.restore();
     }
 
@@ -70,13 +78,14 @@ html_code = """
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Lines banne ke sath-sath photo smoothly saaf hoti jayegi
+        let activeThemeColor = colorThemes[currentThemeIndex];
+        let activeImage = images[currentThemeIndex];
+        
+        // Photo opacity control
         let currentOpacity = (i / totalSteps) * 0.7;
-        if (img.complete) {
-            drawHeartPhoto(currentOpacity);
-        }
+        drawHeartPhoto(currentOpacity, activeImage);
 
-        // Rang-birangi lines ko canvas par maintain rakhna
+        // Lines and stars drawing loop
         for (let step = 0; step < i; step++) {
             let angle = (step * (Math.PI * 2)) / totalSteps;
             let x = 16 * Math.pow(Math.sin(angle), 3);
@@ -84,37 +93,53 @@ html_code = """
             let drawX = centerX + (x * 12.5);
             let drawY = centerY - (y * 12.5);
             
-            let color = colors[step % colors.length];
-
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(drawX, drawY);
-            ctx.strokeStyle = color;
+            ctx.strokeStyle = activeThemeColor;
             ctx.lineWidth = 1.2;
             ctx.globalAlpha = 0.4;
             ctx.stroke();
             ctx.restore();
 
             if (step >= i - 1) {
-                drawTurtleStar(drawX, drawY, color);
+                drawTurtleStar(drawX, drawY, activeThemeColor);
             }
         }
 
         if (i <= totalSteps) {
             i++;
-            setTimeout(animate, 25);
+            setTimeout(animate, 20);
         } else {
-            // Dil pura banne ke baad 4 second tak ruka rahega taaki photo saaf dikhe, fir dobara chalega
+            // Dil pura banne ke baad 3.5 second ruka rahega fir smoothly agla dil shuru hoga
             setTimeout(() => {
-                i = 0;
-                animate();
-            }, 4000);
+                ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+                let fadeCount = 0;
+                
+                function fade() {
+                    if (fadeCount < 10) {
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        fadeCount++;
+                        requestAnimationFrame(fade);
+                    } else {
+                        ctx.fillStyle = "black";
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        i = 0;
+                        // Agla colour aur agli photo select karna (1 se 4 tak)
+                        currentThemeIndex = (currentThemeIndex + 1) % 4;
+                        animate();
+                    }
+                }
+                fade();
+            }, 3500);
         }
     }
     
-    img.onload = function() { animate(); };
-    img.onerror = function() { animate(); }; // Agar photo na mile toh bhi animation chalti rahegi
+    // Pehli photo load hote hi animation shuru ho jaye
+    images[0].onload = function() { animate(); };
+    // Backup safe check agar image load na ho sake toh bhi crash na kare
+    setTimeout(() => { if(i === 0) animate(); }, 1000);
 </script>
 """
 
