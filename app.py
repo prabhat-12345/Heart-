@@ -1,8 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Premium Name Heart", layout="centered")
-st.title("✨ Premium Neon Heart - Prabhat & Laxmi")
+st.set_page_config(page_title="Premium Custom Couple Heart", layout="centered")
+st.title("✨ VIP Neon Heart - Prabhat & Laxmi")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -19,11 +19,7 @@ html_code = """
     const centerY = canvas.height / 2;
     
     let i = 0;
-    const totalSteps = 280; // Aur zyada ghani smooth lines ke liye steps badha diye
-    
-    // Boundary par ghumne wala premium combination string
-    const textPattern = ["P","R","A","B","H","A","T","❤️","L","A","X","M","I","❤️"];
-    let patternIndex = 0;
+    const totalSteps = 240; 
     
     // Premium bright neon palettes
     const colorPalettes = [
@@ -33,11 +29,11 @@ html_code = """
     ];
     let currentPaletteIndex = 0;
 
-    // Premium Premium Chhota Dil banane wala fix function
+    // Premium Sleek Chhota Dil banane wala function
     function drawSleekMiniHeart(x, y, size, color) {
         ctx.save();
         ctx.fillStyle = color;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 10;
         ctx.shadowColor = color;
         
         ctx.beginPath();
@@ -49,25 +45,41 @@ html_code = """
         ctx.restore();
     }
 
-    // Chhota aur sharp Alphabet draw karne wala function
-    function drawSleekLetter(x, y, letter, color) {
+    // Dono peaks par professional text dikhane ke liye function
+    function drawFixedNames(color) {
         ctx.save();
         ctx.fillStyle = color;
-        // Font size 16 se chhota karke 13px bold kar diya taaki standard premium lage
-        ctx.font = "bold 13px sans-serif"; 
+        ctx.font = "bold 18px 'Poppins', 'Segoe UI', sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 15;
         ctx.shadowColor = color;
-        
-        ctx.fillText(letter, x, y);
+
+        // 1. Left Peak par PRABHAT (Exact math placement)
+        // Dil ke parametric formula ke hisaab se left peak approx angle 2.2 par hota h
+        let xLeft = 16 * Math.pow(Math.sin(2.2), 3) * 12.5;
+        let yLeft = (13 * Math.cos(2.2) - 5 * Math.cos(4.4) - 2 * Math.cos(6.6) - Math.cos(8.8)) * 12.5;
+        ctx.fillText("PRABHAT", centerX + xLeft - 25, centerY - yLeft - 25);
+
+        // 2. Right Peak par LAXMI (Exact math placement)
+        // Right peak approx angle 4.1 par hota h
+        let xRight = 16 * Math.pow(Math.sin(4.1), 3) * 12.5;
+        let yRight = (13 * Math.cos(4.1) - 5 * Math.cos(8.2) - 2 * Math.cos(12.3) - Math.cos(16.4)) * 12.5;
+        ctx.fillText("LAXMI", centerX + xRight + 25, centerY - yRight - 25);
+
         ctx.restore();
     }
 
     function animate() {
-        if (i <= totalSteps) {
-            let angle = (i * (Math.PI * 2)) / totalSteps;
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        let currentPalette = colorPalettes[currentPaletteIndex];
+        let randomColor = currentPalette[Math.floor(Math.random() * currentPalette.length)];
+
+        // Sabhi purani lines aur boundary dilon ko draw karna
+        for (let step = 0; step < i; step++) {
+            let angle = (step * (Math.PI * 2)) / totalSteps;
             
             // Heart mathematical formula
             let x = 16 * Math.pow(Math.sin(angle), 3);
@@ -75,39 +87,34 @@ html_code = """
 
             let drawX = centerX + (x * 12.5); 
             let drawY = centerY - (y * 12.5);
+            
+            let stepColor = currentPalette[step % currentPalette.length];
 
-            let currentPalette = colorPalettes[currentPaletteIndex];
-            let randomColor = currentPalette[Math.floor(Math.random() * currentPalette.length)];
-
-            // 1. Center se dense center-to-edge neon lines
+            // 1. Center se edge tak sleek lines
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(drawX, drawY);
-            ctx.strokeStyle = randomColor;
-            ctx.lineWidth = 1.0; // Lines ko thoda aur sleek kiya premium look ke liye
-            ctx.globalAlpha = 0.5;
+            ctx.strokeStyle = stepColor;
+            ctx.lineWidth = 1.0;
+            ctx.globalAlpha = 0.45;
             ctx.stroke();
             ctx.restore();
 
-            // 2. Alternate Pattern: Har 5 steps par ek element lagana
-            if (i % 5 === 0) {
-                let currentItem = textPattern[patternIndex % textPattern.length];
-                
-                if (currentItem === "❤️") {
-                    // Agar pattern me dil h toh sleek mini heart draw hoga (size 5)
-                    drawSleekMiniHeart(drawX, drawY - 2, 5, randomColor);
-                } else {
-                    // Agar alphabet h toh sharp alphabet draw hoga
-                    drawSleekLetter(drawX, drawY, currentItem, randomColor);
-                }
-                patternIndex++;
+            // 2. Boundary par har jagah sirf cute aur chhota dil banna (size 5)
+            if (step % 3 === 0) {
+                drawSleekMiniHeart(drawX, drawY - 3, 5, stepColor);
             }
+        }
 
-            i++;
-            setTimeout(animate, 15); // Smooth premium rendering
+        // Hamesha top par dono naam glow ke sath fix rahenge
+        drawFixedNames(randomColor);
+
+        if (i <= totalSteps) {
+            i += 2; // Ultra Fast Speed
+            setTimeout(animate, 8); 
         } else {
-            // Dil pura hone par 2 second ka pause, fir naya palette loop
+            // Pura banne ke baad 2.5 second hold fir agla round loop
             setTimeout(() => {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
                 let fadeCount = 0;
@@ -121,13 +128,12 @@ html_code = """
                         ctx.fillStyle = "black";
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         i = 0;
-                        patternIndex = 0; // Har baar P se hi suru hoga loop
                         currentPaletteIndex = (currentPaletteIndex + 1) % colorPalettes.length;
                         animate();
                     }
                 }
                 fade();
-            }, 2000);
+            }, 2500);
         }
     }
     
