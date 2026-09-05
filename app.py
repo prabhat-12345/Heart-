@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Heart Curve Animation", layout="centered")
-st.title("💖 Glowing Heart Curve with Stars")
+st.title("💖 Python Heart Curve Exact Match")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -12,63 +12,61 @@ html_code = """
     const canvas = document.getElementById('heartCanvas');
     const ctx = canvas.getContext('2d');
     
-    // Canvas size responsive rakhne ke liye
-    canvas.width = 500;
-    canvas.height = 500;
+    canvas.width = 600;
+    canvas.height = 600;
     
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     
     let i = 0;
-    const colors = ["#FF0055", "#00FFCC", "#99FF00", "#FFCC00", "#00CCFF", "#FF00FF", "#FF6600", "#FF00AA"];
+    const totalSteps = 120;
+    const colors = ["red", "blue", "lime", "yellow", "cyan", "magenta", "orange", "pink"];
 
-    function drawStar(cx, cy, spikes, outerRadius, innerRadius, color) {
-        let rot = Math.PI / 2 * 3;
-        let x = cx;
-        let y = cy;
-        let step = Math.PI / spikes;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy - outerRadius);
-        for (let j = 0; j < spikes; j++) {
-            x = cx + Math.cos(rot) * outerRadius;
-            y = cy + Math.sin(rot) * outerRadius;
-            ctx.lineTo(x, y);
-            rot += step;
-            x = cx + Math.cos(rot) * innerRadius;
-            y = cy + Math.sin(rot) * innerRadius;
-            ctx.lineTo(x, y);
-            rot += step;
+    // Python ka star framework jo forward aur backward lines banata hai
+    function drawTurtleStar(x, y, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        
+        for (let k = 0; k < 8; k++) {
+            let angle = k * (Math.PI / 4); // 45 degrees match
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + Math.cos(angle) * 6, y + Math.sin(angle) * 6);
+            ctx.stroke();
         }
-        ctx.lineTo(cx, cy - outerRadius);
-        ctx.closePath();
-        ctx.fillStyle = color;
-        ctx.fill();
     }
 
     function animate() {
-        // Isko infinite kar diya taaki stars bante rahein aur dil bharta jaye
-        let angle = (i * (Math.PI * 2)) / 120;
-        
-        let x = 16 * Math.pow(Math.sin(angle), 3);
-        let y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
-        
-        // Halka sa random offset lagaya taaki boundary ke aas-paas stars fail kar mota dil banayein
-        let randomSpread = (Math.random() - 0.5) * 15; 
-        let drawX = centerX + (x * 12) + randomSpread;
-        let drawY = centerY - (y * 12) + (Math.random() - 0.5) * 15;
+        if (i < totalSteps) {
+            let angle = (i * (Math.PI * 2)) / 120;
+            
+            // Exact formula python line 22-26 waala
+            let x = 16 * Math.pow(Math.sin(angle), 3);
+            let y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
 
-        let randomColor = colors[Math.floor(Math.random() * colors.length)];
-        
-        // Stars ka size thoda bada aur thick kiya hai (outer radius 12)
-        let starSize = 8 + Math.random() * 6;
-        drawStar(drawX, drawY, 4, starSize, starSize/2.5, randomColor);
-        
-        i += 0.5; // Smooth movement ke liye
-        
-        setTimeout(animate, 15); // Fast and glowing effect ke liye speed badha di
+            // Size set karne ke liye * 12
+            let drawX = centerX + (x * 12);
+            let drawY = centerY - (y * 12);
+
+            let randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            // 1. Center (0,0) se lekar edge tak line banana (t.goto(x, y))
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(drawX, drawY);
+            ctx.strokeStyle = randomColor;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // 2. Boundary ke upar 8-line waala star banana
+            drawTurtleStar(drawX, drawY, randomColor);
+
+            i++;
+            setTimeout(animate, 60); 
+        }
     }
     
-    // Canvas background ko suruat mein black set karne ke liye
+    // Pure page ko black set karna suru mein
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
