@@ -1,8 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="4 Fast Neon Hearts with Photo", layout="centered")
-st.title("✨ 4 Styles Fast Neon Hearts with Your Photo")
+st.set_page_config(page_title="10 Ultra Fast Neon Hearts", layout="centered")
+st.title("✨ 10 Styles & 10 Colors Ultra Fast Neon Hearts")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -18,17 +18,16 @@ html_code = """
     const centerY = canvas.height / 2;
     
     let i = 0;
-    const totalSteps = 240; 
+    const totalSteps = 240; // Ghana pattern
     
-    // 4 Alag-alag Premium Neon Colors
-    const colorThemes = ["#FF0055", "#00CCFF", "#99FF00", "#FFCC00"];
+    // 10 Premium Distinct Neon Colors
+    const colorThemes = [
+        "#FF0055", "#00CCFF", "#99FF00", "#FFCC00", "#FF00FF", 
+        "#00FF88", "#FF5500", "#FF00AA", "#00FFFF", "#CC00FF"
+    ];
     let currentThemeIndex = 0;
 
-    // GitHub par upload ki gayi aapki single photo ko automatically load karna
-    const img = new Image();
-    img.src = "profile.jpg"; 
-
-    // Glowing Neon Star (Turtle style)
+    // Glowing Neon Star
     function drawTurtleStar(x, y, color) {
         ctx.save();
         ctx.strokeStyle = color;
@@ -45,53 +44,54 @@ html_code = """
         ctx.restore();
     }
 
-    // 4 Alag-Alag Dil ke Mathematical Shapes ke Coordinates
+    // 10 Alag-Alag Dil ke Mathematical Formulas aur Shapes
     function getHeartCoordinates(angle, typeIndex) {
         let x = 0, y = 0;
+        
         switch(typeIndex) {
-            case 0: // Style 1: Original Parametric
+            case 0: // Original Parametric
                 x = 16 * Math.pow(Math.sin(angle), 3);
                 y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
                 return { x: x * 12.5, y: y * 12.5 };
-            case 1: // Style 2: Cardioid Heart (Thoda Round)
+            case 1: // Cardioid Heart (Thoda Round)
                 let r1 = 15 * (1 - Math.sin(angle));
                 x = r1 * Math.cos(angle);
                 y = r1 * Math.sin(angle) + 5;
                 return { x: x * 13, y: y * 13 };
-            case 2: // Style 3: Bipolar Smooth
+            case 2: // Bipolar Smooth
                 x = 16 * Math.pow(Math.sin(angle), 3);
                 y = 14 * Math.cos(angle) - 4 * Math.cos(2 * angle) - Math.cos(3 * angle);
                 return { x: x * 12.5, y: y * 12.5 };
-            default: // Style 4: Dense Petal Shape
+            case 3: // Dense Petal Heart
                 x = 16 * Math.pow(Math.sin(angle), 3);
                 y = 12 * Math.cos(angle) - 6 * Math.cos(2 * angle) - 3 * Math.cos(3 * angle) - Math.cos(4 * angle);
                 return { x: x * 13, y: y * 13 };
+            case 4: // Wide Bottom Heart
+                x = 16 * Math.pow(Math.sin(angle), 3);
+                y = 13 * Math.cos(angle) - 5 * Math.cos(2*angle) - 2 * Math.cos(3*angle);
+                return { x: x * 12.5, y: y * 12.5 };
+            case 5: // Pointy Bottom Heart
+                x = 15 * Math.sin(angle) * Math.sin(angle) * Math.sin(angle);
+                y = 12 * Math.cos(angle) - 5 * Math.cos(2*angle) - 2 * Math.cos(3*angle) - Math.cos(4*angle);
+                return { x: x * 13, y: y * 13 };
+            case 6: // Tall Slim Heart
+                x = 14 * Math.pow(Math.sin(angle), 3);
+                y = 15 * Math.cos(angle) - 5 * Math.cos(2*angle) - 2 * Math.cos(3*angle);
+                return { x: x * 12, y: y * 12 };
+            case 7: // Rounded Top Heart
+                x = 16 * Math.pow(Math.sin(angle), 3);
+                y = 11 * Math.cos(angle) - 5 * Math.cos(2*angle) - 2 * Math.cos(3*angle) - Math.cos(4*angle);
+                return { x: x * 13, y: y * 13 };
+            case 8: // Dynamic Flared Heart
+                x = 16 * Math.pow(Math.sin(angle), 3);
+                y = 13 * Math.cos(angle) - 4.5 * Math.cos(2*angle) - 1.5 * Math.cos(3*angle);
+                return { x: x * 12.5, y: y * 12.5 };
+            default: // Cute Fat Heart
+                let r10 = 14 * (1 - Math.sin(angle));
+                x = r10 * Math.cos(angle);
+                y = r10 * Math.sin(angle) + 3;
+                return { x: x * 14, y: y * 14 };
         }
-    }
-
-    // Dil ke shape ke andar photo ko kaat kar (clip) fit karne ke liye
-    function drawHeartPhoto(opacity, typeIndex) {
-        if (!img || !img.complete || img.naturalWidth === 0) return;
-        
-        ctx.save();
-        ctx.beginPath();
-        
-        // Current dil ke shape ke hisaab se photo ko crop area dena
-        for (let t = 0; t <= totalSteps; t++) {
-            let angle = (t * (Math.PI * 2)) / totalSteps;
-            let coords = getHeartCoordinates(angle, typeIndex);
-            let drawX = centerX + coords.x;
-            let drawY = centerY - coords.y;
-            if (t === 0) ctx.moveTo(drawX, drawY);
-            else ctx.lineTo(drawX, drawY);
-        }
-        ctx.closePath();
-        ctx.clip(); 
-
-        ctx.globalAlpha = opacity;
-        let imgSize = 350; 
-        ctx.drawImage(img, centerX - imgSize/2, centerY - imgSize/2 - 20, imgSize, imgSize);
-        ctx.restore();
     }
 
     function animate() {
@@ -99,12 +99,8 @@ html_code = """
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         let activeThemeColor = colorThemes[currentThemeIndex];
-        
-        // Lines banne ke sath-sath photo smoothly reveal hogi
-        let currentOpacity = (i / totalSteps) * 0.7;
-        drawHeartPhoto(currentOpacity, currentThemeIndex);
 
-        // Saari rang-birangi center-to-edge lines ko draw karna
+        // Drawing all previous lines
         for (let step = 0; step < i; step++) {
             let angle = (step * (Math.PI * 2)) / totalSteps;
             let coords = getHeartCoordinates(angle, currentThemeIndex);
@@ -117,7 +113,7 @@ html_code = """
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(drawX, drawY);
             ctx.strokeStyle = activeThemeColor;
-            ctx.lineWidth = 1.4;
+            ctx.lineWidth = 1.5;
             ctx.globalAlpha = 0.45;
             ctx.stroke();
             ctx.restore();
@@ -128,10 +124,10 @@ html_code = """
         }
 
         if (i <= totalSteps) {
-            i += 2; // Lightning FAST Speed
-            setTimeout(animate, 8); 
+            i += 2; // FAST ANIMATION: Ek baar me do steps aage badhega
+            setTimeout(animate, 8); // Super low delay for 3x speed
         } else {
-            // Dil aur photo banne ke baad thodi der screen par rukega
+            // Dil pura hone par thoda sa hold karega fir agle style par jayega
             setTimeout(() => {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
                 let fadeCount = 0;
@@ -145,17 +141,15 @@ html_code = """
                         ctx.fillStyle = "black";
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         i = 0;
-                        // Agla colour aur agla dil ka shape (0 se 3 tak loop)
-                        currentThemeIndex = (currentThemeIndex + 1) % 4;
+                        currentThemeIndex = (currentThemeIndex + 1) % 10; // 10 shapes loop
                         animate();
                     }
                 }
                 fade();
-            }, 2500);
+            }, 1800);
         }
     }
     
-    // Direct trigger
     animate();
 </script>
 """
