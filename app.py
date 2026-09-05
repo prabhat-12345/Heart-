@@ -27,7 +27,7 @@ html_code = """
     const img = new Image();
     img.src = "profile.jpg"; 
 
-    // CHHOTE DIL BANANE WALA NAYA FUNCTION (Boundary ke liye)
+    // EKDOM SEEDHA CHHOTA DIL BANANE WALA FUNCTION (Y-axis Inverted Fix)
     function drawMiniHeart(x, y, size, color) {
         ctx.save();
         ctx.fillStyle = color;
@@ -35,10 +35,10 @@ html_code = """
         ctx.shadowColor = color;
         
         ctx.beginPath();
-        // Chhote dil ka mathematical curve vector draw karne ke liye
-        ctx.moveTo(x, y);
-        ctx.bezierCurveTo(x - size/2, y - size/2, x - size, y + size/3, x, y + size);
-        ctx.bezierCurveTo(x + size, y + size/3, x + size/2, y - size/2, x, y);
+        // Pointy tail upar ki jagah ab perfectly niche aayegi aur bumps upar rahenge
+        ctx.moveTo(x, y + size/3);
+        ctx.bezierCurveTo(x - size/2, y - size, x - size, y - size/3, x, y + size);
+        ctx.bezierCurveTo(x + size, y - size/3, x + size/2, y - size, x, y + size/3);
         
         ctx.closePath();
         ctx.fill();
@@ -116,11 +116,10 @@ html_code = """
             ctx.stroke();
             ctx.restore();
 
-            // Har thodi-thodi doori par boundary par ek chhota sa dil banana
-            // step % 3 isliye taaki dil ek dusre ke upar chadh kar khichdi na banayein
+            // Boundary par fix seedhe mini hearts lagana
             if (step % 3 === 0 && step <= i) {
-                // Dil ko thoda rotate/adjust karke upar-niche set karne ke liye drawY se minus 5 kiya h
-                drawMiniHeart(drawX, drawY - 5, 6, activeThemeColor);
+                // Perfect shape aur position center ke alignment me
+                drawMiniHeart(drawX, drawY - 4, 7, activeThemeColor);
             }
         }
 
