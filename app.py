@@ -1,8 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Heart Curve Animation", layout="centered")
-st.title("💖 True Python Heart Curve Replication")
+st.set_page_config(page_title="Premium Heart Curve", layout="centered")
+st.title("✨ Premium Glowing Heart Curve")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -19,55 +19,66 @@ html_code = """
     const centerY = canvas.height / 2;
     
     let i = 0;
-    const totalSteps = 120;
-    const colors = ["red", "blue", "lime", "yellow", "cyan", "magenta", "orange", "pink"];
+    // Steps badha diye taaki lines bohot ghani aur thick banein
+    const totalSteps = 240; 
+    
+    // Premium neon aur bright colors
+    const colors = ["#FF0055", "#00FFCC", "#99FF00", "#FFCC00", "#00CCFF", "#FF00FF", "#FF3300", "#FF00AA"];
 
-    // Python ka star jo forward(6), backward(6), right(45) karke 8 lines banata hai
-    def drawTurtleStar(x, y, color) {
+    // Boundary ke stars ko premium glowing look dene ke liye
+    function drawTurtleStar(x, y, color) {
+        ctx.save();
         ctx.strokeStyle = color;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2.5; // Stars ki lines thodi thick ki
+        
+        // Neon Glow effect
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = color;
         
         for (let k = 0; k < 8; k++) {
-            let angle = k * (Math.PI / 4); // 45 degrees
+            let angle = k * (Math.PI / 4);
             ctx.beginPath();
             ctx.moveTo(x, y);
-            ctx.lineTo(x + Math.cos(angle) * 6, y + Math.sin(angle) * 6);
+            // Star ka size thoda bada kiya (8px)
+            ctx.lineTo(x + Math.cos(angle) * 8, y + Math.sin(angle) * 8); 
             ctx.stroke();
         }
+        ctx.restore();
     }
 
     function animate() {
         if (i < totalSteps) {
-            let angle = (i * (Math.PI * 2)) / 120;
+            // Smooth dense drawing ke liye angle change kiya
+            let angle = (i * (Math.PI * 2)) / totalSteps;
             
-            // Formula exact line 22-26 waala
             let x = 16 * Math.pow(Math.sin(angle), 3);
             let y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
 
-            // Scaling match karne ke liye * 12 kiya hai
             let drawX = centerX + (x * 12);
             let drawY = centerY - (y * 12);
 
             let randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-            // 1. Center se boundary tak line kheenchne ke liye (t.goto(x,y))
+            // 1. Center se edge tak ki lines ko premium aur thick banana
+            ctx.save();
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(drawX, drawY);
             ctx.strokeStyle = randomColor;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.5; // Line thodi thick ki taaki bhara hua dikhe
+            ctx.globalAlpha = 0.85; // Halki si transparency soft look ke liye
             ctx.stroke();
+            ctx.restore();
 
-            // 2. Boundary par star banane ke liye (for _ in range(8))
+            // 2. Boundary par neon star draw karna
             drawTurtleStar(drawX, drawY, randomColor);
 
             i++;
-            // Is number ko badha kar slow ya kam karke fast kar sakte ho
-            setTimeout(animate, 60); 
+            // Ghani lines hain isliye speed thodi fast ki taaki loading mein maza aaye
+            setTimeout(animate, 30); 
         }
     }
     
-    // Background black karne ke liye
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
