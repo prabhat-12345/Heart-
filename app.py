@@ -21,13 +21,12 @@ html_code = """
     let i = 0;
     const totalSteps = 240; 
     
-    // 4 Alag-alag premium single-color palettes (Pink, Cyan, Lime/Green, Yellow)
+    // 4 Alag-alag premium single-color themes (Pink, Cyan, Lime, Yellow)
     const colorThemes = ["#FF0055", "#00CCFF", "#99FF00", "#FFCC00"];
-    
-    // 4 Photos ko load karna
-    const images = [];
     const imageNames = ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg"];
     
+    // 4 Images ka structure taiyar karna
+    const images = [];
     for (let s = 0; s < 4; s++) {
         images[s] = new Image();
         images[s].src = imageNames[s];
@@ -52,7 +51,8 @@ html_code = """
     }
 
     function drawHeartPhoto(opacity, imgObj) {
-        if (!imgObj || !imgObj.complete) return;
+        // Agar photo puri tarah load ho chuki hai tabhi render karein, warna bina photo ke dil chalne de
+        if (!imgObj || !imgObj.complete || imgObj.naturalWidth === 0) return;
         
         ctx.save();
         ctx.beginPath();
@@ -112,7 +112,7 @@ html_code = """
             i++;
             setTimeout(animate, 20);
         } else {
-            // Dil pura banne ke baad 3.5 second ruka rahega fir smoothly agla dil shuru hoga
+            // Dil pura banne ke baad 3.5 second ruka rahega fir agla dil shuru hoga
             setTimeout(() => {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
                 let fadeCount = 0;
@@ -126,7 +126,6 @@ html_code = """
                         ctx.fillStyle = "black";
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         i = 0;
-                        // Agla colour aur agli photo select karna (1 se 4 tak)
                         currentThemeIndex = (currentThemeIndex + 1) % 4;
                         animate();
                     }
@@ -136,10 +135,8 @@ html_code = """
         }
     }
     
-    // Pehli photo load hote hi animation shuru ho jaye
-    images[0].onload = function() { animate(); };
-    // Backup safe check agar image load na ho sake toh bhi crash na kare
-    setTimeout(() => { if(i === 0) animate(); }, 1000);
+    // Direct trigger bina kisi delay ya blocking ke
+    animate();
 </script>
 """
 
