@@ -1,8 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Infinite Neon Heart", layout="centered")
-st.title("✨ Infinite Glowing Neon Heart")
+st.set_page_config(page_title="Premium Heart Curve", layout="centered")
+st.title("✨ Premium Glowing Heart Curve")
 
 html_code = """
 <div style="background-color: black; display: flex; justify-content: center; align-items: center; height: 85vh; width: 100%;">
@@ -19,94 +19,66 @@ html_code = """
     const centerY = canvas.height / 2;
     
     let i = 0;
-    const totalSteps = 240; // Ghana (thick) banane ke liye high density steps
+    // Steps badha diye taaki lines bohot ghani aur thick banein
+    const totalSteps = 240; 
     
-    // Pure, premium neon color palettes
-    const colorPalettes = [
-        ["#FF0055", "#00FFCC", "#99FF00", "#FFCC00", "#00CCFF", "#FF00FF"],
-        ["#FF3366", "#FF6633", "#FFCC33", "#33FF66", "#3366FF", "#9933FF"],
-        ["#00FFFF", "#00FF88", "#0088FF", "#00FF00", "#00FFDD", "#00AAFF"]
-    ];
-    let currentPaletteIndex = 0;
+    // Premium neon aur bright colors
+    const colors = ["#FF0055", "#00FFCC", "#99FF00", "#FFCC00", "#00CCFF", "#FF00FF", "#FF3300", "#FF00AA"];
 
-    // Premium Neon Star with Heavy Glow
+    // Boundary ke stars ko premium glowing look dene ke liye
     function drawTurtleStar(x, y, color) {
         ctx.save();
         ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5; // Stars ki lines thodi thick ki
         
-        // Premium Shadow Blur for Real Neon Look
-        ctx.shadowBlur = 15;
+        // Neon Glow effect
+        ctx.shadowBlur = 10;
         ctx.shadowColor = color;
         
         for (let k = 0; k < 8; k++) {
             let angle = k * (Math.PI / 4);
             ctx.beginPath();
             ctx.moveTo(x, y);
-            ctx.lineTo(x + Math.cos(angle) * 7, y + Math.sin(angle) * 7); 
+            // Star ka size thoda bada kiya (8px)
+            ctx.lineTo(x + Math.cos(angle) * 8, y + Math.sin(angle) * 8); 
             ctx.stroke();
         }
         ctx.restore();
     }
 
     function animate() {
-        if (i <= totalSteps) {
+        if (i < totalSteps) {
+            // Smooth dense drawing ke liye angle change kiya
             let angle = (i * (Math.PI * 2)) / totalSteps;
             
-            // Mathematics formula
             let x = 16 * Math.pow(Math.sin(angle), 3);
             let y = (13 * Math.cos(angle)) - (5 * Math.cos(2 * angle)) - (2 * Math.cos(3 * angle)) - Math.cos(4 * angle);
 
-            let drawX = centerX + (x * 12.5); // Slightly bigger size
-            let drawY = centerY - (y * 12.5);
+            let drawX = centerX + (x * 12);
+            let drawY = centerY - (y * 12);
 
-            let currentPalette = colorPalettes[currentPaletteIndex];
-            let randomColor = currentPalette[Math.floor(Math.random() * currentPalette.length)];
+            let randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-            // 1. Center se thick neon ray nikalna
+            // 1. Center se edge tak ki lines ko premium aur thick banana
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(drawX, drawY);
             ctx.strokeStyle = randomColor;
-            ctx.lineWidth = 1.2;
-            ctx.globalAlpha = 0.7; // Standard smoothness ke liye
+            ctx.lineWidth = 1.5; // Line thodi thick ki taaki bhara hua dikhe
+            ctx.globalAlpha = 0.85; // Halki si transparency soft look ke liye
             ctx.stroke();
             ctx.restore();
 
-            // 2. Edge par neon star banana
+            // 2. Boundary par neon star draw karna
             drawTurtleStar(drawX, drawY, randomColor);
 
             i++;
-            setTimeout(animate, 20); // Fast aur responsive rendering
-        } else {
-            // Jab ek dil pura ban jaye, toh screen ko smoothly clear karke naya dil shuru karein
-            setTimeout(() => {
-                // Fade out effect (Dhire se black color layer chadhana)
-                ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-                let fadeCount = 0;
-                
-                function fade() {
-                    if (fadeCount < 10) {
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        fadeCount++;
-                        requestAnimationFrame(fade);
-                    } else {
-                        // Reset karke naya dil banana shuru karein
-                        ctx.fillStyle = "black";
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        i = 0;
-                        // Agla neon color theme select karein
-                        currentPaletteIndex = (currentPaletteIndex + 1) % colorPalettes.length;
-                        animate();
-                    }
-                }
-                fade();
-            }, 1500); // Dil banne ke baad 1.5 second tak screen par rukega phir naya banega
+            // Ghani lines hain isliye speed thodi fast ki taaki loading mein maza aaye
+            setTimeout(animate, 30); 
         }
     }
     
-    // Starting screen
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
